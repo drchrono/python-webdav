@@ -4,7 +4,7 @@
 import re
 
 from lxml.etree import ElementTree, HTML
-from BeautifulSoup import BeautifulStoneSoup
+from bs4 import BeautifulSoup
 
 
 class Response(object):
@@ -129,8 +129,8 @@ class SoupParser(object):
             :return: self.response_objects
 
         """
-        data_elements = BeautifulStoneSoup(data)
-        all_response_elements = data_elements.findAll(
+        data_elements = BeautifulSoup(data, 'xml')
+        all_response_elements = data_elements.find_all(
             re.compile(r'(?i)[a-z0-9]:response'))
 
         for response in all_response_elements:

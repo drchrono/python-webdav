@@ -109,6 +109,25 @@ class Connection(object):
         except requests.ConnectionError:
             raise
 
+    def send_streaming_get(self, path, headers=None):
+        """ Send a streaming GET request, useful for uploading large files
+            It returns iterator over the content.
+            :see http://docs.python-requests.org/en/latest/api/#requests.Response.iter_content
+
+            :param path: The path (without host) to the resource to get
+            :type path: String
+
+            :param headers: Additional headers for the request should be added here
+            :type headers: Dict
+        """
+        if not headers:
+            headers = {}
+
+        uri = "%s/%s" % (self.host.rstrip('/'), path.lstrip('/'))
+        resp = self.httpcon.get(uri, headers=headers, stream=True)
+
+        return resp, resp.iter_content()
+
     def send_put(self, path, body, headers=None):
         """ This PUT request will put data files onto a webdav server.
             However, please note that due to the way in which httplib2 sends

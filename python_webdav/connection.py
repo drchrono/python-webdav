@@ -109,7 +109,7 @@ class Connection(object):
         except requests.ConnectionError:
             raise
 
-    def send_streaming_get(self, path, headers=None):
+    def send_streaming_get(self, path, headers=None, chunk_size=102400):
         """ Send a streaming GET request, useful for uploading large files
             It returns iterator over the content.
             :see http://docs.python-requests.org/en/latest/api/#requests.Response.iter_content
@@ -119,6 +119,10 @@ class Connection(object):
 
             :param headers: Additional headers for the request should be added here
             :type headers: Dict
+
+            :param chunk_size: The size of the chunk to be returned by the
+            iterator, default is 100K
+            :type chunk_size: Int
         """
         if not headers:
             headers = {}
@@ -126,7 +130,7 @@ class Connection(object):
         uri = "%s/%s" % (self.host.rstrip('/'), path.lstrip('/'))
         resp = self.httpcon.get(uri, headers=headers, stream=True)
 
-        return resp, resp.iter_content()
+        return resp, resp.iter_content(chunk_size=chunk_size)
 
     def send_put(self, path, body, headers=None):
         """ This PUT request will put data files onto a webdav server.

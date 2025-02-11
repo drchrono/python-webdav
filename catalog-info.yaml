@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: python-webdav
+  description: python-webdav is a client webdav library for Python
+  annotations:
+    business-unit: EverHealth
+    github.com/project-slug: drchrono/python-webdav
+    product: DRC
+spec:
+  type: service
+  lifecycle: production
+  owner: EverHealth
+  implementation:
+    languages:
+    - Python
